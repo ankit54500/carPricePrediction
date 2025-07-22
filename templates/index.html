@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Used Car Prediction</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" href="https://i.ibb.co/gZ3ch10d/nw-1-modified.png" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+        ☰
+    </button>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <a href="#" class="header-btn" onclick="shareProfile()">📤 Share</a>
+
+            <script>
+                function shareProfile() {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'Ankit Rai Portfolio',
+                            text: 'Check out this awesome portfolio!',
+                            url: 'https://ankit-bcawala.web.app/'
+                        }).then(() => {
+                            console.log('Thanks for sharing!');
+                        }).catch((error) => {
+                            console.error('Error sharing:', error);
+                        });
+                    } else {
+                        alert("Sharing not supported on this device. Please copy the link manually.");
+                    }
+                }
+            </script>
+
+            <a href="https://ankit-bcawala.web.app/" class="header-btn" target="_blank">👨‍💻 My Portfolio</a>
+            <a href="#" class="header-btn">⚙️ Settings</a>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>🤖 Navigation</h2>
+            <p>ML Prediction Dashboard</p>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#home" class="nav-link active" onclick="scrollToSection('home')">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#project" class="nav-link" onclick="scrollToSection('project')">
+                    <span class="nav-icon">📊</span>
+                    Project
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#documentation" class="nav-link" onclick="scrollToSection('documentation')">
+                    <span class="nav-icon">📚</span>
+                    Documentation
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#source-code" class="nav-link" onclick="scrollToSection('source-code')">
+                    <span class="nav-icon">💻</span>
+                    Source Code
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#about" class="nav-link" onclick="scrollToSection('about')">
+                    <span class="nav-icon">ℹ️</span>
+                    About
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link" onclick="scrollToSection('contact')">
+                    <span class="nav-icon">📧</span>
+                    Contact Me
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section">
+            <div class="hero-image">
+                🤖 ML Prediction System
+            </div>
+            <h1>Car Price Prediction App</h1>
+            <p>Welcome to the Car Price Prediction App! Use this tool to estimate your car's market value based on its specifications and condition.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Accurate Predictions</h3>
+                    <p>Advanced ML algorithms for accurate car price prediction</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Results</h3>
+                    <p>Get instant price predictions with our optimized model</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure & Private</h3>
+                    <p>Your car data is protected with enterprise-grade security</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Section - Car Price Prediction Form -->
+        <section id="project" class="section">
+            <h2>Car Price Prediction</h2>
+            <p>Enter your car details to predict its market value</p>
+
+            <div class="prediction-container">
+                <!-- Prediction Form -->
+                <div class="prediction-form">
+                    <h3>📋 Enter Your Car Details</h3>
+                    <form id="predictionForm" method="POST"  accept-charset="utf-8">
+                        <div class="form-group">
+                            <label for="company">Select Company: </label>
+                            <select id="company" name="company" onchange="load_car_model(this.id,'model')" required>
+                                <option value="">-- Select Company --</option>
+                                {% for company in companies%}
+                                <option value="{{ company }}">{{ company }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-info">Choose Your Car Company name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="model">Select Car Model: </label>
+                            <select id="model" name="model" required>
+                                <option value="">-- Select Car Model --</option>
+                            </select>
+                            <div class="input-info">Choose Your Car Model</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Select Year of Purchase: </label>
+                            <select id="year" name="year" required>
+                                <option value="">-- Select year --</option>
+                                {% for year in years%}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-info">Choose Car purchasing year</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="fuel_type">Select Fuel Type: </label>
+                            <select id="fuel_type" name="fuel_type" required>
+                                <option value="">-- Select Fuel Type --</option>
+                                {% for fuel_type in fuel_types%}
+                                <option value="{{ fuel_type }}">{{ fuel_type }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="input-info">Choose Your Car Fuel Type</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="kms_driven">Enter Number of Kilometers travelled: </label>
+                            <input type="number" id="kms_driven" name="kms_driven" placeholder="Enter kilometers here" required>
+                            <div class="input-info">Enter how much your car has run in Kilometers</div>
+                        </div>
+
+                        <button type="button" class="predict-btn" id="predictBtn" onclick="send_data()">Predict Price</button>
+                    </form>
+                </div>
+
+                <!-- Prediction Result -->
+                <div class="prediction-result">
+                    <div class="result-display">
+                        <div class="loading" id="loading" style="display: none;">
+                            <div class="spinner"></div>
+                            <p>Analyzing your car data...</p>
+                        </div>
+
+                        <div id="initialMessage">
+                            <div class="result-icon">🚗</div>
+                            <h3>Ready for Prediction</h3>
+                            <p>Fill out the form to get your car price estimate.</p>
+                        </div>
+
+                        <div class="result" id="result" style="display: none;">
+                            <h3 id="resultTitle"></h3>
+                            <div class="result-details" id="resultDetails"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Documentation Section -->
+        <section id="documentation" class="section">
+            <h2>Documentation</h2>
+            <div class="card">
+                <h3>📚 User Guide</h3>
+                <p><strong>Overview:</strong><br>
+                    This section helps users understand how to use the Car Price Prediction App effectively.
+                </p>
+                <p><strong>Steps to Use:</strong></p>
+                <ol>
+                    <li><strong>Select Car Details:</strong><br>
+                        - Choose your <strong>Car Company</strong><br>
+                        - Select the <strong>Car Model</strong><br>
+                        - Pick the <strong>Year of Purchase</strong><br>
+                        - Choose the <strong>Fuel Type</strong><br>
+                        - Enter <strong>Kilometers Driven</strong>
+                    </li>
+                    <li><strong>Click on Predict:</strong> The system will process your data and show your car price prediction.</li>
+                    <li><strong>Interpret the Output:</strong><br>
+                        The predicted price will be displayed based on current market trends and your car's specifications.
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Source Code Section -->
+        <section id="source-code" class="section">
+            <h2>Source Code</h2>
+            <div class="card">
+                <h3>💻 GitHub Repository</h3>
+                <p>
+                    The complete source code for the Car Price Prediction App is available on GitHub.
+                    <br><em><a href="https://github.com/ankit54500/carPricePrediction">Click For Repository Link</a></em>
+                </p>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <h2>About</h2>
+            <div class="card">
+                <h3>🎯 Mission</h3>
+                <p>To provide accurate car price predictions using advanced machine learning, helping users make informed decisions about buying or selling cars.</p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2>Contact Me</h2>
+            <div class="card">
+                <h3>📧 Get In Touch</h3>
+                <p>
+                    Have questions about the Car Price Prediction App? Feel free to reach out!
+                </p>
+                <p>
+                    <strong>Email:</strong> <a href="mailto:bcawala00@gmail.com">bcawala00@gmail.com</a><br>
+                    <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/ankit-raj-371950278/" target="_blank">linkedin.com/in/ankit-raj-371950278</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ========== UI FUNCTIONS (KEEP THESE) ==========
+        
+        // Smooth scrolling function
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+            // Update active navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+
+            // Close mobile menu if open
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('active');
+            }
+        }
+
+        // Toggle mobile sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Update active navigation on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+
+            if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // ========== CAR PREDICTION FUNCTIONS (FIXED) ==========
+        
+        // Load car models based on selected company
+        function load_car_model(company_id, car_model_id) {
+            var company = document.getElementById(company_id);
+            var car_model = document.getElementById(car_model_id);
+            
+            // Clear existing options except the first one
+            car_model.innerHTML = '<option value="">-- Select Car Model --</option>';
+            
+            {% for company in companies %}
+                if(company.value == "{{ company }}") {
+                    {% for model in models %}
+                        {% if company in model %}
+                            var newOption = document.createElement('option');
+                            newOption.value = "{{ model }}";
+                            newOption.innerHTML = "{{ model }}";
+                            car_model.appendChild(newOption);
+                        {% endif %}
+                    {% endfor %}
+                }
+            {% endfor %}
+        }
+
+        // Send car data for prediction
+        function send_data() {
+            // Validate form first
+            var form = document.querySelector('form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            var fd = new FormData(document.querySelector('form'));
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/predict', true);
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('initialMessage').style.display = 'none';
+            document.getElementById('predictBtn').disabled = true;
+            
+            xhr.onreadystatechange = function() {
+                if(xhr.readyState == XMLHttpRequest.DONE) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('predictBtn').disabled = false;
+                    
+                    if(xhr.status == 200) {
+                        document.getElementById('resultTitle').innerHTML = 'Predicted Price: ₹' + xhr.responseText;
+                        document.getElementById('result').style.display = 'block';
+                    } else {
+                        document.getElementById('resultTitle').innerHTML = 'Error: Failed to get prediction';
+                        document.getElementById('result').style.display = 'block';
+                    }
+                }
+            }
+
+            xhr.onerror = function() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('predictBtn').disabled = false;
+                document.getElementById('resultTitle').innerHTML = 'Error: Network error occurred';
+                document.getElementById('result').style.display = 'block';
+            }
+
+            xhr.send(fd);
+        }
+
+        // Prevent form from submitting normally
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            send_data();
+        });
+    </script>
+</body>
+
+</html>
