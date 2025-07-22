@@ -125,13 +125,14 @@ def model_status():
 
 if __name__ == "__main__":
     if modelLr is not None:
-        app.run(debug=True)
+        app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
     else:
         print("\n" + "="*50)
         print("MODEL LOADING FAILED!")
         print("="*50)
         print("Please run the model retraining script first.")
         print("Check the 'Model Retraining Script' artifact for the solution.")
+
 
 
 if __name__ == "__main__":
